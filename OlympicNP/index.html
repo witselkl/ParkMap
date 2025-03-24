@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Hello, Olympic National Park</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="" />
+
+  <link rel="stylesheet" href="https://js.arcgis.com/4.30/esri/themes/light/main.css">
+  <script src="https://js.arcgis.com/4.30/"></script>
+
+      <!--put your Bootstrap stylesheet links below this comment and above style.css-->
+      <link rel="stylesheet" href="css/bootstrap.min.css">
+      <link rel="stylesheet" href="css/style.css">
+
+  <script>  
+    require([
+      "esri/config",
+      "esri/Map",
+      "esri/views/MapView",
+      "esri/Graphic",
+      "esri/layers/GraphicsLayer",
+      "esri/layers/FeatureLayer",
+      "esri/widgets/BasemapGallery",
+      "esri/widgets/Expand",
+      "esri/widgets/Locate",
+      "esri/widgets/Search"
+    ], function(esriConfig, Map, MapView, Graphic, GraphicsLayer, FeatureLayer, BasemapGallery, Expand, Locate, Search) {
+      
+    esriConfig.apiKey = "AAPTxy8BH1VEsoebNVZXo8HurLnZ1SKuVjcmhuYy7ZgFo7nRkeaex5Pyse90hA3_-twQ9aZh3ukW7y7j9oxVbinOUkZTkuP5jIlAEtH5e_7DHP0liWf6tn6QTxetcFnI3rIi0xPzkoaEPekxL0-rDUwsAdMQRuux-0uuNMTE7e_lNeG45pvgeuCSr5abahKFzvuUJ-ewQsq9pGAJYlLcwozKzYElZv8h7OlHzgxN1NcRAiWme1AEaa5tzqVZug9kV8C5AT1_64sbOrZQ"; 
+     const map = new Map({
+       basemap: "arcgis-topographic"
+     }); 
+     
+
+      const view = new MapView({
+        container: "viewDiv",
+        map: map,
+        center: [-123.6660277778, 47.8371666667],
+                zoom: 9
+      });
+
+      
+//Add a POI maker 
+      const graphicsLayer = new GraphicsLayer();  
+      map.add(graphicsLayer);
+
+      const point = { 
+        type: "point",  
+        longitude: -157.7410761,    
+        latitude: 21.390015
+      };
+
+      const simpleMarkerSymbol = {  
+        type: "simple-marker",
+        style: "triangle", 
+        color: [139, 0, 0],  
+        outline: {  
+          color: [255, 255, 255], 
+          width: 1
+        }  
+      };
+
+      const popupTemplate = {
+        title: "{Name}",
+        content: "{Description}"
+      };
+
+      const attributes = {
+        Name: "WW2 Pill Box",
+        Description: "A popular hiking destination providing 360 degree view of the Kailua Bay."
+      };
+
+      const pointGraphic = new Graphic({  
+        geometry: point,  
+        symbol: simpleMarkerSymbol,
+        attributes: attributes,
+        popupTemplate: popupTemplate  
+      });
+
+//adding the point to the graphics layer
+graphicsLayer.add(pointGraphic);
+
+      // // Define a pop-up for SchoolLayer
+      // const popupSchool = {
+      //   title: "School",
+      //   content: "<b>Name:</b> {NAME}<br><b>City:</b> {CITY}<br> <b>Population:</b> {POPULATION}<br>"
+      // };
+
+      // // Adding the School feature layer
+      // const SchoolLayer = new FeatureLayer({
+      //   url: "https://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/HIFLD_Public_Schools_Placekey/FeatureServer",
+      //   outFields: ["NAME", "CITY", "POPULATION"],
+      //   popupTemplate: popupSchool
+      // });
+
+      // map.add(SchoolLayer);
+
+// Define a pop-up for Vistor Center
+const popupBuilding = {
+        title: "Park Facility",
+        content: "<b>Name:</b> {MAPLABEL}<br><b>Seasonal:</b> {SEASONAL}<br> <b>Use:</b> {BLDGTYPE}<br>"
+      };
+
+      // Adding the School feature layer
+      const BuildingLayer = new FeatureLayer({
+        url: "https://mapservices.nps.gov/arcgis/rest/services/NationalDatasets/NPS_Public_Buildings_Geographic/MapServer",
+        outFields: ["MAPLABEL", "SEASONAL", "BLDGTYPE"],
+        popupTemplate: popupBuilding
+      });
+
+      map.add(BuildingLayer);      
+
+ //Define a pop-up for AirportLayer
+const popupAirport = {
+  "title": "Airport",
+  "content": "<b>Name:</b> {Fac_Name}<br>"
+};
+
+// Setting up the icon for Airports
+const airportRenderer = {
+  type: "simple",
+  symbol: {
+    type: "picture-marker",
+    url: "local_airport_24dp_5F6368.png",  // Use relative path
+    width: "18px",
+    height: "18px"
+  }
+};
+
+const AirportLayer = new FeatureLayer({
+  url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/US_AirportsGeog576/FeatureServer",
+  renderer: airportRenderer,
+  outFields: ["Fac_Name"],
+  popupTemplate: popupAirport
+});
+
+//adding the feature layer to the map
+map.add(AirportLayer);
+
+
+      // Locate Button
+      const locateBtn = new Locate({
+        view: view
+      });
+      view.ui.add(locateBtn, "top-left");
+
+      // Search Bar
+      const search = new Search({
+        view: view
+      }); 
+
+      view.ui.add(search, "top-right");
+
+
+      // Basemap Gallery
+      const basemapGallery = new BasemapGallery({
+          view: view,
+        });
+
+      //creates a collapse basemap gallery button
+      const basemapGalleryExpand = new Expand({
+        view: view,
+        content: basemapGallery,
+        expandIconClass: "esri-icon-basemap" // Optional, defaults to "esri-icon-expand"
+      });
+
+      view.ui.add(basemapGalleryExpand, "top-left");             
+
+   }); 
+  </script>
+
+  <style>  
+    html,  
+    body,  
+    #viewDiv {  
+      padding: 0;
+      margin: 0;  
+      height: 100%;  
+      width: 100%;  
+    }  
+  </style> 
+</head>
+<body>
+  <h1>Olympic National Park Map </h1>
+  <h1>Welcome to your national park...</h1>
+  <a href="https://arcg.is/0i9qSa" target="_blank" class="addRecordBtn">Report Trail Hazard</a>
+  <a href="https://arcg.is/zHa190" target="_blank" class="addRecordBtn">Report Tree Hazard</a>
+  <a href="https://arcg.is/14ay0e2" target="_blank" class="addRecordBtn">Report Marine Debris</a>
+  <div id="viewDiv"></div>
+
+  <!-- <script>viewDiv = document.getElementById("viewDiv");
+            mydiv.addEventListener("click", function(){
+                alert("Hello World!");
+            });
+        </script>  //couldn't get to work because the style section wouldn't accept a #mydiv background along with the "add record" button. -->
+    <script type="text/javascript" src="js/main.js"></script>
+  <div id="viewDiv"></div>
+</body>
+</html>
