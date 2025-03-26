@@ -12,6 +12,19 @@
       <!--put your Bootstrap stylesheet links below this comment and above style.css-->
       <link rel="stylesheet" href="css/bootstrap.min.css">
       <link rel="stylesheet" href="css/style.css">
+   
+  <style>
+    html,
+      body,
+      #viewDiv {
+       padding: 0;
+       margin: 0 auto;
+       height: 100%;
+       width: 90%;
+      }
+
+  </style>    
+        
 
   <script>  
     require([
@@ -40,7 +53,27 @@
                 zoom: 9
       });
 
-      
+// Add a POI Hot Spring
+// Define a pop-up for the SpringLayer 
+const popupSpring = { 
+                title: "Spring", 
+                content: "<b>Name:</b> {Name}<br>" };
+                
+        // Setting up the icon for Springs 
+        const SpringRenderer = { 
+                type: "simple", 
+                symbol: { type: "picture-marker", 
+                url: "hot_tub_24dp_0000F5.png", 
+                width: "18px", height: "18px" } };
+
+         // Setting up Washington Spring data
+    const WASpringLayer = new FeatureLayer({ 
+                url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/Washington_State_Hot_Spring/FeatureServer", 
+                renderer: SpringRenderer,
+                outFields: ["Name"], 
+                popupTemplate: popupSpring });   
+                map.add(WASpringLayer);         
+
 //Add a POI maker 
       const graphicsLayer = new GraphicsLayer();  
       map.add(graphicsLayer);
@@ -96,7 +129,7 @@ graphicsLayer.add(pointGraphic);
 
       // map.add(SchoolLayer);
 
-// Define a pop-up for Vistor Center
+// Define a pop-up for Park Buildings
 const popupBuilding = {
         title: "Park Facility",
         content: "<b>Name:</b> {MAPLABEL}<br><b>Seasonal:</b> {SEASONAL}<br> <b>Use:</b> {BLDGTYPE}<br>"
@@ -110,6 +143,27 @@ const popupBuilding = {
       });
 
       map.add(BuildingLayer);      
+
+// Setting up the icon for Parking
+const ParkingRenderer = {
+  type: "simple",
+  symbol: {
+    type: "picture-marker",
+    url: "local_parking_18dp_0000F5.png",  // Use relative path
+    width: "18px",
+    height: "18px"
+  }
+};      
+
+// Adding the parking feature layer
+const ParkingLayer = new FeatureLayer({
+  url: "https://mapservices.nps.gov/arcgis/rest/services/NationalDatasets/NPS_Public_ParkingLots_Geographic/MapServer",
+  renderer: ParkingRenderer,
+  minScale: 50000, // Layer will be hidden when zoomed in beyond 1:500,000
+  maxScale: 0 // Layer will be visible at all zoom levels when zoomed out.
+});
+  
+  map.add(ParkingLayer);
 
  //Define a pop-up for AirportLayer
 const popupAirport = {
@@ -131,12 +185,50 @@ const airportRenderer = {
 const AirportLayer = new FeatureLayer({
   url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/US_AirportsGeog576/FeatureServer",
   renderer: airportRenderer,
+  minScale: 500000, // Layer will be hidden when zoomed in beyond 1:500,000
   outFields: ["Fac_Name"],
   popupTemplate: popupAirport
 });
 
 //adding the feature layer to the map
 map.add(AirportLayer);
+
+
+//Adding Park Boundary layer to the map
+const ParkRenderer = {
+  type: "simple", // Simple renderer for consistent styling
+    symbol: {
+      type: "simple-line",
+      color: [98, 14, 12], // Dark green (RGB)
+      width: 1, // Line width in pixels
+      style: "solid" // Other styles: "dash", "dot", "dash-dot", "dash-dot-dot"
+    }
+};
+
+const ParkBoundary = new FeatureLayer({
+  url: "https://mapservices.nps.gov/arcgis/rest/services/Wilderness/Wilderness/MapServer",
+  renderer: ParkRenderer,
+});
+
+map.add(ParkBoundary);
+
+// adding trails
+const trailRenderer = {
+  type: "simple", 
+    symbol: {
+      type: "simple-line",
+      color: [98, 13, 12], //change later
+      width: 1.5, // change later
+      style: "dash"
+    }
+  };
+
+const trailFeature = new FeatureLayer({
+  url: "https://services2.arcgis.com/FiaPA4ga0iQKduv3/arcgis/rest/services/National_Park_Service_Trails/FeatureServer",
+  renderer: trailRenderer,
+});
+
+map.add(trailFeature);
 
 
       // Locate Button
@@ -170,17 +262,7 @@ map.add(AirportLayer);
    }); 
   </script>
 
-  <style>  
-    html,  
-    body,  
-    #viewDiv {  
-      padding: 0;
-      margin: 0;  
-      height: 100%;  
-      width: 100%;  
-    }  
-  </style> 
-</head>
+ </head>
 <body>
   <h1>Olympic National Park Map </h1>
   <h1>Welcome to your national park...</h1>
