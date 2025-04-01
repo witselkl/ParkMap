@@ -196,7 +196,7 @@ const EVRenderer = {
 const EVLayer = new FeatureLayer({
       url: "https://services9.arcgis.com/RHVPKKiFTONKtxq3/arcgis/rest/services/Alternate_Fuel/FeatureServer",
       minScale: 500000, // Layer will be hidden when zoomed in beyond 1:500,000
-      maxScale: 0, // Layer will be visible at all zoom levels when zoomed out.
+      maxScale: 1000, // Layer will be visible at all zoom levels when zoomed out.
       renderer: EVRenderer});
       map.add(EVLayer);
  
@@ -409,7 +409,15 @@ const editorWidget = new Editor({
         ]
       });
 
-      view.ui.add(editorWidget, "top-right");
+  // Create the Expand widget to contain the editor
+  const editorExpand = new Expand({
+    view: view,
+    content: editorWidget, // Pass the editor as the content
+    expandIconClass: "esri-icon-edit", // Optional: use an edit icon
+    expanded: false // Set to false to collapse by default
+  });      
+
+      view.ui.add(editorExpand, "top-right");
 
   // Create the Legend widget
   const legend = new Legend({
@@ -417,14 +425,22 @@ const editorWidget = new Editor({
     layerInfos: [
       {layer: EVLayer, title: "Electric Vehicle Charging Station"},
       {layer: trailFeature, title: trailFeature.title},
-      {layer: WASpringLayer, title: "Hot Spring"}
+      {layer: WASpringLayer, title: "Hot Spring"},
+      {layer: ParkingLayer, title: "Parking"},
     ]
       
     
   });
+  // Create the Expand widget to contain the legend
+  const legendExpand = new Expand({
+    view: view,
+    content: legend, // Pass the legend as the content
+    expandIconClass: "esri-icon-legend", // Optional: use a legend icon
+    expanded: false // Set to false to collapse by default
+  });
 
   // Add the Legend widget to the view
-  view.ui.add(legend, "bottom-left");    
+  view.ui.add(legendExpand, "bottom-left");    
 
    }); 
   </script>
