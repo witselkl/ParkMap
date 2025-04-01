@@ -41,18 +41,22 @@ c.	description of the back end of your app.
 
 Using the national park data, I used ArcGIS REST service URL to an ArcGIS Maps SDK for JavaScript (formerly ArcGIS API for JavaScript) map to add feature layers to my site. Here are the data types and REST:
 
-Park Boundaries: https://mapservices.nps.gov/arcgis/rest/services/Wilderness/Wilderness/MapServer
+1) Park Boundaries: https://mapservices.nps.gov/arcgis/rest/services/Wilderness/Wilderness/MapServer
 
-Buidings: https://mapservices.nps.gov/arcgis/rest/services/NationalDatasets/NPS_Public_Buildings_Geographic/MapServer
+2) Buidings: https://mapservices.nps.gov/arcgis/rest/services/NationalDatasets/NPS_Public_Buildings_Geographic/MapServer
 
-Parking: https://mapservices.nps.gov/arcgis/rest/services/NationalDatasets/NPS_Public_ParkingLots_Geographic/MapServer
+3) Parking: https://mapservices.nps.gov/arcgis/rest/services/NationalDatasets/NPS_Public_ParkingLots_Geographic/MapServer
 
-Campsites:
+4) Trails: https://services2.arcgis.com/FiaPA4ga0iQKduv3/arcgis/rest/services/National_Park_Service_Trails/FeatureServer
 
-Trails: https://services2.arcgis.com/FiaPA4ga0iQKduv3/arcgis/rest/services/National_Park_Service_Trails/FeatureServer
+5) EV: https://services9.arcgis.com/RHVPKKiFTONKtxq3/arcgis/rest/services/Alternate_Fuel/FeatureServer
+
+6) Airports: https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/US_AirportsGeog576/FeatureServer
 
 Ferries:
 
-Weather:
+Weather: Open weather API
 
-EV: https://services9.arcgis.com/RHVPKKiFTONKtxq3/arcgis/rest/services/Alternate_Fuel/FeatureServer
+Campsites:
+
+

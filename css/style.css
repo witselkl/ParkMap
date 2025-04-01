@@ -53,7 +53,7 @@
 /*** JUMBOTRON ***/
 
 .jumbotron {
-    background-image: url("../assets/banner.PNG");
+    background-image: url("banner.PNG");
     text-align: center;
     color: #100f0f;
     padding: 3%;

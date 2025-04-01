@@ -23,10 +23,29 @@
        width: 90%;
       }
 
-  </style>    
-        
+      .addRecordBtn {
+     position: absolute;
+     z-index: 10;
+     top: 10px;
+     right: 10px;
+     background-color: #0079c1;
+     color: white;
+     padding: 8px 16px; 
+     border: none;
+     border-radius: 4px;
+     font-size: 14px;
+     cursor: pointer;
+     text-decoration: none;
+   }
 
-  <script>  
+   .addRecordBtn:hover {
+   background-color: #005a87;
+   }    
+
+  </style>    
+<script> 
+
+  // collapse/expand basemap. Establish default basemap and opening map location
     require([
       "esri/config",
       "esri/Map",
@@ -37,15 +56,17 @@
       "esri/widgets/BasemapGallery",
       "esri/widgets/Expand",
       "esri/widgets/Locate",
-      "esri/widgets/Search"
-    ], function(esriConfig, Map, MapView, Graphic, GraphicsLayer, FeatureLayer, BasemapGallery, Expand, Locate, Search) {
+      "esri/widgets/Search",
+      "esri/widgets/Editor", // Add the Editor widget
+    ], function(esriConfig, Map, MapView, Graphic, GraphicsLayer, FeatureLayer, BasemapGallery, Expand, Locate, Search, Editor) {
       
-    esriConfig.apiKey = "AAPTxy8BH1VEsoebNVZXo8HurLnZ1SKuVjcmhuYy7ZgFo7nRkeaex5Pyse90hA3_-twQ9aZh3ukW7y7j9oxVbinOUkZTkuP5jIlAEtH5e_7DHP0liWf6tn6QTxetcFnI3rIi0xPzkoaEPekxL0-rDUwsAdMQRuux-0uuNMTE7e_lNeG45pvgeuCSr5abahKFzvuUJ-ewQsq9pGAJYlLcwozKzYElZv8h7OlHzgxN1NcRAiWme1AEaa5tzqVZug9kV8C5AT1_64sbOrZQ"; 
+    
+      esriConfig.apiKey = "AAPTxy8BH1VEsoebNVZXo8HurLnZ1SKuVjcmhuYy7ZgFo7nRkeaex5Pyse90hA3_-twQ9aZh3ukW7y7j9oxVbinOUkZTkuP5jIlAEtH5e_7DHP0liWf6tn6QTxetcFnI3rIi0xPzkoaEPekxL0-rDUwsAdMQRuux-0uuNMTE7e_lNeG45pvgeuCSr5abahKFzvuUJ-ewQsq9pGAJYlLcwozKzYElZv8h7OlHzgxN1NcRAiWme1AEaa5tzqVZug9kV8C5AT1_64sbOrZQ"; 
      const map = new Map({
        basemap: "arcgis-topographic"
      }); 
-     
 
+    
       const view = new MapView({
         container: "viewDiv",
         map: map,
@@ -53,26 +74,132 @@
                 zoom: 9
       });
 
-// Add a POI Hot Spring
+
+
+    
+
+// Add a POI - WA Hot Spring
 // Define a pop-up for the SpringLayer 
 const popupSpring = { 
-                title: "Spring", 
+  title: "Spring", 
                 content: "<b>Name:</b> {Name}<br>" };
                 
-        // Setting up the icon for Springs 
-        const SpringRenderer = { 
-                type: "simple", 
-                symbol: { type: "picture-marker", 
-                url: "hot_tub_24dp_0000F5.png", 
-                width: "18px", height: "18px" } };
+// Setting up the icon for Springs 
+const SpringRenderer = { 
+  type: "simple", 
+      symbol: { type: "picture-marker", 
+      url: "hot_tub_24dp_0000F5.png", 
+      width: "18px", height: "18px" } };
 
-         // Setting up Washington Spring data
-    const WASpringLayer = new FeatureLayer({ 
-                url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/Washington_State_Hot_Spring/FeatureServer", 
+// Setting up Washington Spring data
+const WASpringLayer = new FeatureLayer({ 
+      url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/Washington_State_Hot_Spring/FeatureServer", 
+      renderer: SpringRenderer,
+      outFields: ["Name"], 
+      popupTemplate: popupSpring });   
+      map.add(WASpringLayer);  
+      
+// Setting up Oregon Spring data
+const ORSpringLayer = new FeatureLayer({ 
+      url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/Oregon_Hot_Springs_Map_gdb/FeatureServer", 
+      renderer: SpringRenderer,
+      outFields: ["Name"], 
+      popupTemplate: popupSpring });   
+      map.add(ORSpringLayer);
+
+// Setting up California Spring data
+const CASpringLayer = new FeatureLayer({ 
+      url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/California_Hot_Springs_Map_gdb/FeatureServer", 
+      renderer: SpringRenderer,
+      outFields: ["Name"], 
+      popupTemplate: popupSpring });   
+      map.add(CASpringLayer); 
+      
+// Setting up Idaho Spring data
+const IASpringLayer = new FeatureLayer({ 
+      url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/Idaho_Hot_Springs_Map_gdb/FeatureServer", 
+      renderer: SpringRenderer,
+      outFields: ["Name"], 
+      popupTemplate: popupSpring });   
+      map.add(IASpringLayer); 
+                
+// Setting up Utah Spring data
+const UTSpringLayer = new FeatureLayer({ 
+      url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/Utah_Hot_Springs_Map_gdb/FeatureServer", 
+      renderer: SpringRenderer,
+      outFields: ["Name"], 
+      popupTemplate: popupSpring });   
+      map.add(UTSpringLayer); 
+                
+// Setting up Arizona Spring data
+const AZSpringLayer = new FeatureLayer({ 
+      url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/Hot_Springs_Arizona_Map_gdb/FeatureServer", 
+      renderer: SpringRenderer,
+      outFields: ["Name"], 
+      popupTemplate: popupSpring });   
+      map.add(AZSpringLayer); 
+                
+// Setting up Nevada Spring data
+const NVSpringLayer = new FeatureLayer({ 
+      url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/Hot_Springs_Nevada_Map_gdb/FeatureServer", 
+      renderer: SpringRenderer,
+      outFields: ["Name"], 
+      popupTemplate: popupSpring });   
+      map.add(NVSpringLayer); 
+      
+ // Setting up New Mexico Spring data
+ const NMSpringLayer = new FeatureLayer({ 
+                url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/New_Mexico_Hot_Springs_Map_gdb/FeatureServer", 
                 renderer: SpringRenderer,
                 outFields: ["Name"], 
                 popupTemplate: popupSpring });   
-                map.add(WASpringLayer);         
+                map.add(NMSpringLayer);   
+                
+        // Setting up Colorado Spring data
+        const COSpringLayer = new FeatureLayer({ 
+                url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/Colorado_Hot_Springs_Map_gdb/FeatureServer", 
+                renderer: SpringRenderer,
+                outFields: ["Name"], 
+                popupTemplate: popupSpring });   
+                map.add(COSpringLayer);       
+                        
+        // Setting up Montana Spring data
+        const MOSpringLayer = new FeatureLayer({ 
+                url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/Montana_Hot_Springs_Map_gdb/FeatureServer", 
+                renderer: SpringRenderer,
+                outFields: ["Name"], 
+                popupTemplate: popupSpring });   
+                map.add(MOSpringLayer);
+                
+// Setting up Wyoming Spring data
+const WYSpringLayer = new FeatureLayer({ 
+      url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/Wyoming_Hot_Springs_Map_gdb/FeatureServer", 
+      renderer: SpringRenderer,
+      outFields: ["Name"], 
+      popupTemplate: popupSpring });   
+      map.add(WYSpringLayer);       
+
+// Setting up the icon for Parking
+const EVRenderer = {
+  title: "Electric Vehicle Charger",
+  type: "simple",
+  symbol: {
+    type: "picture-marker",
+    url: "EV.png",  // Use relative path
+    width: "18px",
+    height: "18px"
+  }
+};  
+
+//Setting up EV marker
+const EVLayer = new FeatureLayer({
+      url: "https://services9.arcgis.com/RHVPKKiFTONKtxq3/arcgis/rest/services/Alternate_Fuel/FeatureServer",
+      minScale: 500000, // Layer will be hidden when zoomed in beyond 1:500,000
+      maxScale: 0, // Layer will be visible at all zoom levels when zoomed out.
+      renderer: EVRenderer});
+      map.add(EVLayer);
+ 
+   
 
 //Add a POI maker 
       const graphicsLayer = new GraphicsLayer();  
@@ -114,21 +241,7 @@ const popupSpring = {
 //adding the point to the graphics layer
 graphicsLayer.add(pointGraphic);
 
-      // // Define a pop-up for SchoolLayer
-      // const popupSchool = {
-      //   title: "School",
-      //   content: "<b>Name:</b> {NAME}<br><b>City:</b> {CITY}<br> <b>Population:</b> {POPULATION}<br>"
-      // };
-
-      // // Adding the School feature layer
-      // const SchoolLayer = new FeatureLayer({
-      //   url: "https://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/HIFLD_Public_Schools_Placekey/FeatureServer",
-      //   outFields: ["NAME", "CITY", "POPULATION"],
-      //   popupTemplate: popupSchool
-      // });
-
-      // map.add(SchoolLayer);
-
+      
 // Define a pop-up for Park Buildings
 const popupBuilding = {
         title: "Park Facility",
@@ -149,7 +262,7 @@ const ParkingRenderer = {
   type: "simple",
   symbol: {
     type: "picture-marker",
-    url: "local_parking_18dp_0000F5.png",  // Use relative path
+    url: "local_parking_18dp_5985E1.png",  // Use relative path
     width: "18px",
     height: "18px"
   }
@@ -212,6 +325,13 @@ const ParkBoundary = new FeatureLayer({
 
 map.add(ParkBoundary);
 
+//Trail popup
+const popupTrail = {
+  "title": "Trail",
+  "content": "<b>Name:</b> {TRLNAME}<br><b>Status:</b> {TRLSTATUS}<br><b>Surface:</b> {TRLSURFACE}<br>"
+};
+
+
 // adding trails
 const trailRenderer = {
   type: "simple", 
@@ -226,9 +346,17 @@ const trailRenderer = {
 const trailFeature = new FeatureLayer({
   url: "https://services2.arcgis.com/FiaPA4ga0iQKduv3/arcgis/rest/services/National_Park_Service_Trails/FeatureServer",
   renderer: trailRenderer,
+  outFields: ["TRLNAME", "TRLSTATUS","TRLSURFACE"],
+  popupTemplate: popupTrail
 });
 
 map.add(trailFeature);
+
+const reviewFeature = new FeatureLayer({
+  url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/Facilities_NP/FeatureServer",
+});
+
+map.add(reviewFeature);
 
 
       // Locate Button
@@ -257,18 +385,42 @@ map.add(trailFeature);
         expandIconClass: "esri-icon-basemap" // Optional, defaults to "esri-icon-expand"
       });
 
-      view.ui.add(basemapGalleryExpand, "top-left");             
+      view.ui.add(basemapGalleryExpand, "top-left"); 
+      
+ 
+      
+//add editor
+const editorWidget = new Editor({
+  view: view,
+        layerInfos: [
+          {
+            layer: reviewFeature, // Or another editable layer
+            fieldConfig: [
+              // Configure editable fields here, if needed
+            ],
+            enabled: true,
+          },
+          //add other layers here
+          // {
+          //   layer: trailFeature, //or any other editable layer
+          //   enabled: true,
+          // },
+        ]
+      });
+
+      view.ui.add(editorWidget, "top-right");
 
    }); 
   </script>
 
- </head>
+</head>
 <body>
   <h1>Olympic National Park Map </h1>
   <h1>Welcome to your national park...</h1>
-  <a href="https://arcg.is/0i9qSa" target="_blank" class="addRecordBtn">Report Trail Hazard</a>
-  <a href="https://arcg.is/zHa190" target="_blank" class="addRecordBtn">Report Tree Hazard</a>
-  <a href="https://arcg.is/14ay0e2" target="_blank" class="addRecordBtn">Report Marine Debris</a>
+      <!-- <a href="https://fieldmaps.arcgis.app/?itemID=5c124dc526be4cc9bd64dc11d39f02b5&referenceContext=open&portalURL=https%3A%2F%2FUW-Mad.maps.arcgis.com" target="_blank" class="addRecordBtn">Add Facility Report</a>  -->
+  <!-- <a href="https://arcg.is/0i9qSa" target="_blank" class="addRecordBtn">Report Trail Hazard</a> -->
+  <!-- <a href="https://arcg.is/zHa190" target="_blank" class="addRecordBtn">Report Tree Hazard</a> -->
+  <!-- <a href="https://arcg.is/14ay0e2" target="_blank" class="addRecordBtn">Report Marine Debris</a> -->
   <div id="viewDiv"></div>
 
   <!-- <script>viewDiv = document.getElementById("viewDiv");
