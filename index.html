@@ -58,7 +58,8 @@
       "esri/widgets/Locate",
       "esri/widgets/Search",
       "esri/widgets/Editor", // Add the Editor widget
-    ], function(esriConfig, Map, MapView, Graphic, GraphicsLayer, FeatureLayer, BasemapGallery, Expand, Locate, Search, Editor) {
+      "esri/widgets/Legend",
+    ], function(esriConfig, Map, MapView, Graphic, GraphicsLayer, FeatureLayer, BasemapGallery, Expand, Locate, Search, Editor, Legend) {
       
     
       esriConfig.apiKey = "AAPTxy8BH1VEsoebNVZXo8HurLnZ1SKuVjcmhuYy7ZgFo7nRkeaex5Pyse90hA3_-twQ9aZh3ukW7y7j9oxVbinOUkZTkuP5jIlAEtH5e_7DHP0liWf6tn6QTxetcFnI3rIi0xPzkoaEPekxL0-rDUwsAdMQRuux-0uuNMTE7e_lNeG45pvgeuCSr5abahKFzvuUJ-ewQsq9pGAJYlLcwozKzYElZv8h7OlHzgxN1NcRAiWme1AEaa5tzqVZug9kV8C5AT1_64sbOrZQ"; 
@@ -409,6 +410,21 @@ const editorWidget = new Editor({
       });
 
       view.ui.add(editorWidget, "top-right");
+
+  // Create the Legend widget
+  const legend = new Legend({
+    view: view,
+    layerInfos: [
+      {layer: EVLayer, title: "Electric Vehicle Charging Station"},
+      {layer: trailFeature, title: trailFeature.title},
+      {layer: WASpringLayer, title: "Hot Spring"}
+    ]
+      
+    
+  });
+
+  // Add the Legend widget to the view
+  view.ui.add(legend, "bottom-left");    
 
    }); 
   </script>
