@@ -43,7 +43,7 @@ Using the national park data, I used ArcGIS REST service URL to an ArcGIS Maps S
 
 1) Park Boundaries: https://mapservices.nps.gov/arcgis/rest/services/Wilderness/Wilderness/MapServer
 
-2) Buidings: https://mapservices.nps.gov/arcgis/rest/services/NationalDatasets/NPS_Public_Buildings_Geographic/MapServer
+2) Buildings:  https://mapservices.nps.gov/arcgis/rest/services/NationalDatasets/NPS_Public_Buildings_Geographic/MapServer
 
 3) Parking: https://mapservices.nps.gov/arcgis/rest/services/NationalDatasets/NPS_Public_ParkingLots_Geographic/MapServer
 
@@ -52,6 +52,8 @@ Using the national park data, I used ArcGIS REST service URL to an ArcGIS Maps S
 5) EV: https://services9.arcgis.com/RHVPKKiFTONKtxq3/arcgis/rest/services/Alternate_Fuel/FeatureServer
 
 6) Airports: https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/US_AirportsGeog576/FeatureServer
+
+7) Hotspring: https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/Washington_State_Hot_Spring/FeatureServer
 
 Ferries:
 
