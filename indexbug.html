@@ -315,7 +315,10 @@ const AirportLayer = new FeatureLayer({
 //adding the feature layer to the map
 map.add(AirportLayer);
 
-
+// const layerToggle = document.getElementById("layer1-toggle");
+//         layerToggle.addEventListener("change", function(e) {
+//             AirportLayer.visible = e.target.checked;
+//         });
 
 
 //Adding Park Boundary layer to the map
@@ -452,22 +455,42 @@ const editorWidget = new Editor({
   // Add the Legend widget to the view
   view.ui.add(legendExpand, "bottom-left");    
 
-const AirportToggle = document.getElementById("layer1-toggle");
-        AirportToggle.addEventListener("change", function(e) {
-            AirportLayer.visible = e.target.checked;
+// const AirportToggle = document.getElementById("layer1-toggle");
+//         AirportToggle.addEventListener("change", function(e) {
+//             AirportLayer.visible = e.target.checked;
+//         });
+//         // Set the label text.
+//         AirportToggle.nextElementSibling.textContent = AirportLayer.title;
+
+ // Create a layer toggle
+//  const layerToggleContainer = document.createElement("div");
+//         layerToggleContainer.id = "layer-toggle";
+//         layerToggleContainer.style.position = "absolute";
+//         layerToggleContainer.style.top = "10px";
+//         layerToggleContainer.style.right = "10px";
+//         // layerToggleContainer.style.backgroundColor = "white";
+//         layerToggleContainer.style.padding = "10px";
+//         layerToggleContainer.style.zIndex = "99";
+//         document.body.appendChild(layerToggleContainer);
+
+        // Add a toggle for the EV Layer
+        const evToggle = document.createElement("input");
+        evToggle.type = "checkbox";
+        evToggle.id = "ev-layer-toggle";
+        evToggle.checked = true; // Initial state - set to true if you want it on by default
+        layerToggleContainer.appendChild(evToggle);
+
+        const evLabel = document.createElement("label");
+        evLabel.htmlFor = "ev-layer-toggle";
+        evLabel.textContent = "Electric Vehicle Charging Stations"; // Use the title from the layer
+        layerToggleContainer.appendChild(evLabel);
+
+        evToggle.addEventListener("change", function(e) {
+            EVLayer.visible = e.target.checked;
         });
-        // Set the label text.
-        AirportToggle.nextElementSibling.textContent = AirportLayer.title;
 
-  const EVToggle = document.getElementById("layer2-toggle");
-     EVToggle.addEventListener("change", function(e) {
-          EVLayer.visible = e.target.checked;
-        });
-        // Set the label text.
-        EVToggle.nextElementSibling.textContent = EVLayer.title; 
 
-   }); 
-
+    });
    
   </script>
 

@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Olympic National Park</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://js.arcgis.com/4.30/esri/themes/light/main.css">
+    <script src="https://js.arcgis.com/4.30/"></script>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        html,
+        body,
+        #viewDiv {
+            padding: 0;
+            margin: 0 auto;
+            height: 90%;
+            width: 90%;
+        }
+
+        .addRecordBtn {
+            position: absolute;
+            z-index: 10;
+            top: 10px;
+            right: 10px;
+            background-color: #0079c1;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .addRecordBtn:hover {
+            background-color: #005a87;
+        }
+        #viewDiv { height: 100%; width: 100%; }
+        #layer-toggle { position: absolute; top: 10px; right: 10px; background: white; padding: 10px; z-index: 99; }
+    </style>
+<script>
+    require([
+        "esri/config",
+        "esri/Map",
+        "esri/views/MapView",
+        "esri/Graphic",
+        "esri/layers/GraphicsLayer",
+        "esri/layers/FeatureLayer",
+        "esri/widgets/BasemapGallery",
+        "esri/widgets/Expand",
+        "esri/widgets/Locate",
+        "esri/widgets/Search",
+        "esri/widgets/Editor",
+        "esri/widgets/Legend",
+    ], function(esriConfig, Map, MapView, Graphic, GraphicsLayer, FeatureLayer, BasemapGallery, Expand, Locate, Search, Editor, Legend) {
+
+        esriConfig.apiKey = "AAPTxy8BH1VEsoebNVZXo8HurLnZ1SKuVjcmhuYy7ZgFo7nRkeaex5Pyse90hA3_-twQ9aZh3ukW7y7j9oxVbinOUkZTkuP5jIlAEtH5e_7DHP0liWf6tn6QTxetcFnI3rIi0xPzkoaEPekxL0-rDUwsAdMQRuux-0uuNMTE7e_lNeG45pvgeuCSr5abahKFzvuUJ-ewQsq9pGAJYlLcwozKzYElZv8h7OlHzgxN1NcRAiWme1AEaa5tzqVZug9kV8C5AT1_64sbOrZQ";
+        const map = new Map({
+            basemap: "arcgis-topographic",
+        });
+
+        const view = new MapView({
+            container: "viewDiv",
+            map: map,
+            center: [-123.6660277778, 47.8371666667],
+            zoom: 9
+        });
+
+
+        // Add a POI - WA Hot Spring
+        // Define a pop-up for the SpringLayer
+        const popupSpring = {
+            title: "Spring",
+            content: "<b>Name:</b> {Name}<br>"
+        };
+
+        // Setting up the icon for Springs
+        const SpringRenderer = {
+            type: "simple",
+            symbol: {
+                type: "picture-marker",
+                url: "hot_tub_24dp_0000F5.png",
+                width: "18px",
+                height: "18px"
+            }
+        };
+
+        // Setting up Washington Spring data
+        const WASpringLayer = new FeatureLayer({
+            url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/Washington_State_Hot_Spring/FeatureServer",
+            renderer: SpringRenderer,
+            outFields: ["Name"],
+            popupTemplate: popupSpring
+        });
+        map.add(WASpringLayer);
+
+        // Setting up Oregon Spring data
+        const ORSpringLayer = new FeatureLayer({
+            url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/Oregon_Hot_Springs_Map_gdb/FeatureServer",
+            renderer: SpringRenderer,
+            outFields: ["Name"],
+            popupTemplate: popupSpring
+        });
+        map.add(ORSpringLayer);
+
+        // Setting up California Spring data
+        const CASpringLayer = new FeatureLayer({
+            url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/California_Hot_Springs_Map_gdb/FeatureServer",
+            renderer: SpringRenderer,
+            outFields: ["Name"],
+            popupTemplate: popupSpring
+        });
+        map.add(CASpringLayer);
+
+        // Setting up Idaho Spring data
+        const IASpringLayer = new FeatureLayer({
+            url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/Idaho_Hot_Springs_Map_gdb/FeatureServer",
+            renderer: SpringRenderer,
+            outFields: ["Name"],
+            popupTemplate: popupSpring
+        });
+        map.add(IASpringLayer);
+
+        // Setting up Utah Spring data
+        const UTSpringLayer = new FeatureLayer({
+            url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/Utah_Hot_Springs_Map_gdb/FeatureServer",
+            renderer: SpringRenderer,
+            outFields: ["Name"],
+            popupTemplate: popupSpring
+        });
+        map.add(UTSpringLayer);
+
+        // Setting up Arizona Spring data
+        const AZSpringLayer = new FeatureLayer({
+            url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/Hot_Springs_Arizona_Map_gdb/FeatureServer",
+            renderer: SpringRenderer,
+            outFields: ["Name"],
+            popupTemplate: popupSpring
+        });
+        map.add(AZSpringLayer);
+
+        // Setting up Nevada Spring data
+        const NVSpringLayer = new FeatureLayer({
+            url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/Hot_Springs_Nevada_Map_gdb/FeatureServer",
+            renderer: SpringRenderer,
+            outFields: ["Name"],
+            popupTemplate: popupSpring
+        });
+        map.add(NVSpringLayer);
+
+        // Setting up New Mexico Spring data
+        const NMSpringLayer = new FeatureLayer({
+            url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/New_Mexico_Hot_Springs_Map_gdb/FeatureServer",
+            renderer: SpringRenderer,
+            outFields: ["Name"],
+            popupTemplate: popupSpring
+        });
+        map.add(NMSpringLayer);
+
+        // Setting up Colorado Spring data
+        const COSpringLayer = new FeatureLayer({
+            url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/Colorado_Hot_Springs_Map_gdb/FeatureServer",
+            renderer: SpringRenderer,
+            outFields: ["Name"],
+            popupTemplate: popupSpring
+        });
+        map.add(COSpringLayer);
+
+        // Setting up Montana Spring data
+        const MOSpringLayer = new FeatureLayer({
+            url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/Montana_Hot_Springs_Map_gdb/FeatureServer",
+            renderer: SpringRenderer,
+            outFields: ["Name"],
+            popupTemplate: popupSpring
+        });
+        map.add(MOSpringLayer);
+
+        // Setting up Wyoming Spring data
+        const WYSpringLayer = new FeatureLayer({
+            url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/Wyoming_Hot_Springs_Map_gdb/FeatureServer",
+            renderer: SpringRenderer,
+            outFields: ["Name"],
+            popupTemplate: popupSpring
+        });
+        map.add(WYSpringLayer);
+
+        // Setting up the icon for Parking
+        const EVRenderer = {
+            title: "Electric Vehicle Charger",
+            type: "simple",
+            symbol: {
+                type: "picture-marker",
+                url: "EV.png",
+                width: "18px",
+                height: "18px"
+            }
+        };
+
+        // Setting up EV marker
+        const EVLayer = new FeatureLayer({
+            url: "https://services9.arcgis.com/RHVPKKiFTONKtxq3/arcgis/rest/services/Alternate_Fuel/FeatureServer",
+            minScale: 500000, // Layer will be hidden when zoomed in beyond 1:500,000
+            maxScale: 1000, // Layer will be visible at all zoom levels when zoomed out.
+            renderer: EVRenderer
+        });
+        map.add(EVLayer);
+
+
+        // Add a POI maker
+        const graphicsLayer = new GraphicsLayer();
+        map.add(graphicsLayer);
+
+        const point = {
+            type: "point",
+            longitude: -157.7410761,
+            latitude: 21.390015
+        };
+
+        const simpleMarkerSymbol = {
+            type: "simple-marker",
+            style: "triangle",
+            color: [139, 0, 0],
+            outline: {
+                color: [255, 255, 255],
+                width: 1
+            }
+        };
+
+        const popupTemplate = {
+            title: "{Name}",
+            content: "{Description}"
+        };
+
+        const attributes = {
+            Name: "WW2 Pill Box",
+            Description: "A popular hiking destination providing 360 degree view of the Kailua Bay."
+        };
+
+        const pointGraphic = new Graphic({
+            geometry: point,
+            symbol: simpleMarkerSymbol,
+            attributes: attributes,
+            popupTemplate: popupTemplate
+        });
+
+        // adding the point to the graphics layer
+        graphicsLayer.add(pointGraphic);
+
+
+        // Define a pop-up for Park Buildings
+        const popupBuilding = {
+            title: "Park Facility",
+            content: "<b>Name:</b> {MAPLABEL}<br><b>Seasonal:</b> {SEASONAL}<br> <b>Use:</b> {BLDGTYPE}<br>"
+        };
+
+        // Adding the School feature layer
+        const BuildingLayer = new FeatureLayer({
+            url: "https://mapservices.nps.gov/arcgis/rest/services/NationalDatasets/NPS_Public_Buildings_Geographic/MapServer",
+            outFields: ["MAPLABEL", "SEASONAL", "BLDGTYPE"],
+            popupTemplate: popupBuilding
+        });
+
+        map.add(BuildingLayer);
+
+        // Setting up the icon for Parking
+        const ParkingRenderer = {
+            type: "simple",
+            symbol: {
+                type: "picture-marker",
+                url: "local_parking_18dp_5985E1.png",
+                width: "18px",
+                height: "18px"
+            }
+        };
+
+        // Adding the parking feature layer
+        const ParkingLayer = new FeatureLayer({
+            url: "https://mapservices.nps.gov/arcgis/rest/services/NationalDatasets/NPS_Public_ParkingLots_Geographic/MapServer",
+            renderer: ParkingRenderer,
+            minScale: 50000, // Layer will be hidden when zoomed in beyond 1:500,000
+            maxScale: 0 // Layer will be visible at all zoom levels when zoomed out.
+        });
+
+        map.add(ParkingLayer);
+
+        //Define a pop-up for AirportLayer
+        const popupAirport = {
+            "title": "Airport",
+            "content": "<b>Name:</b> {Fac_Name}<br>"
+        };
+
+        // Setting up the icon for Airports
+        const airportRenderer = {
+            type: "simple",
+            symbol: {
+                type: "picture-marker",
+                url: "local_airport_24dp_5F6368.png",
+                width: "18px",
+                height: "18px"
+            }
+        };
+
+        const AirportLayer = new FeatureLayer({
+            url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/US_AirportsGeog576/FeatureServer",
+            renderer: airportRenderer,
+            minScale: 500000, // Layer will be hidden when zoomed in beyond 1:500,000
+            outFields: ["Fac_Name"],
+            popupTemplate: popupAirport,
+            title: "Airports" // Add the title here
+        });
+
+        // adding the feature layer to the map
+        map.add(AirportLayer);
+
+        const layerToggle = document.getElementById("layer1-toggle");
+        layerToggle.addEventListener("change", function(e) {
+            AirportLayer.visible = e.target.checked;
+        });
+
+        // Check if layerToggle is null
+        if (layerToggle) {
+            // Check if nextSibling exists
+            if (layerToggle.nextSibling) {
+                layerToggle.nextSibling.textContent = AirportLayer.title;
+            } else {
+                console.error("Error: layerToggle.nextSibling is null.  The label element is missing or not correctly positioned after the input.");
+            }
+        } else {
+            console.error("Error: layerToggle is null.  The input element with id 'layer1-toggle' was not found.");
+        }
+
+
+        //Adding Park Boundary layer to the map
+        const ParkRenderer = {
+            type: "simple", // Simple renderer for consistent styling
+            symbol: {
+                type: "simple-line",
+                color: [20, 110, 10], // Dark green (RGB)
+                width: 2.5, // Line width in pixels
+                style: "solid" // Other styles: "dash", "dot", "dash-dot", "dash-dot-dot"
+            }
+        };
+
+        const ParkBoundary = new FeatureLayer({
+            url: "https://mapservices.nps.gov/arcgis/rest/services/Wilderness/Wilderness/MapServer",
+            renderer: ParkRenderer,
+        });
+
+        map.add(ParkBoundary);
+
+        // Trail popup
+        const popupTrail = {
+            "title": "Trail",
+            "content": "<b>Name:</b> {TRLNAME}<br><b>Status:</b> {TRLSTATUS}<br><b>Surface:</b> {TRLSURFACE}<br>"
+        };
+
+
+        // adding trails
+        const trailRenderer = {
+            type: "simple",
+            symbol: {
+                type: "simple-line",
+                color: [98, 13, 12], //change later
+                width: 1.5, // change later
+                style: "dash"
+            }
+        };
+
+        const trailFeature = new FeatureLayer({
+            url: "https://services2.arcgis.com/FiaPA4ga0iQKduv3/arcgis/rest/services/National_Park_Service_Trails/FeatureServer",
+            renderer: trailRenderer,
+            outFields: ["TRLNAME", "TRLSTATUS", "TRLSURFACE"],
+            popupTemplate: popupTrail,
+            title: "Trails" // Add title for legend
+        });
+
+        map.add(trailFeature);
+
+        const reviewFeature = new FeatureLayer({
+            url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/Facilities_NP/FeatureServer",
+        });
+
+        map.add(reviewFeature);
+
+
+        // Locate Button
+        const locateBtn = new Locate({
+            view: view
+        });
+        view.ui.add(locateBtn, "top-left");
+
+        // Search Bar
+        const search = new Search({
+            view: view
+        });
+
+        view.ui.add(search, "top-right");
+
+
+        // Basemap Gallery
+        const basemapGallery = new BasemapGallery({
+            view: view,
+        });
+
+        // creates a collapse basemap gallery button
+        const basemapGalleryExpand = new Expand({
+            view: view,
+            content: basemapGallery,
+            expandIconClass: "esri-icon-basemap" // Optional, defaults to "esri-icon-expand"
+        });
+
+        view.ui.add(basemapGalleryExpand, "top-left");
+
+
+        // add editor
+        const editorWidget = new Editor({
+            view: view,
+            layerInfos: [
+                {
+                    layer: reviewFeature, // Or another editable layer
+                    fieldConfig: [
+                        // Configure editable fields here, if needed
+                    ],
+                    enabled: true,
+                },
+                //add other layers here
+                // {
+                //  layer: trailFeature, //or any other editable layer
+                //  enabled: true,
+                // },
+            ]
+        });
+
+        // Create the Expand widget to contain the editor
+        const editorExpand = new Expand({
+            view: view,
+            content: editorWidget, // Pass the editor as the content
+            expandIconClass: "esri-icon-edit", // Optional: use an edit icon
+            expanded: false // Set to false to collapse by default
+        });
+
+        view.ui.add(editorExpand, "top-right");
+
+        // Create the Legend widget
+        const legend = new Legend({
+            view: view,
+            layerInfos: [
+                { layer: EVLayer, title: "Electric Vehicle Charging Station" },
+                { layer: trailFeature, title: "Trails" },
+                { layer: WASpringLayer, title: "Hot Spring" },
+                { layer: ParkingLayer, title: "Parking" },
+                { layer: AirportLayer, title: "Airports"} //added airport layer to the legend
+            ]
+
+        });
+        // Create the Expand widget to contain the legend
+        const legendExpand = new Expand({
+            view: view,
+            content: legend, // Pass the legend as the content
+            expandIconClass: "esri-icon-legend", // Optional: use a legend icon
+            expanded: false // Set to false to collapse by default
+        });
+
+        // Add the Legend widget to the view
+        view.ui.add(legendExpand, "bottom-left");
+
+    });
+</script>
+</head>
+<body>
+    
+
+    <h1>Welcome to your park...</h1>
+    <h1>Olympic National Park, Washington</h1>
+    <div id="viewDiv"></div>
+    <div id="layer-toggle">
+        <label><input type="checkbox" id="layer1-toggle" checked> Airport</label>
+    </div>
+    <div id="viewDiv"></div>
+</body>
+</html>

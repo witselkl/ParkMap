@@ -7,10 +7,10 @@
 
 /* Navbar title */
 .navbar-default .navbar-brand {
-    color: white;
+    color: #0e0e0e;
     font-size: px;
     font-weight: bold;
-}
+    }
 
 /* Navbar hover effects */
 .navbar-default .navbar-brand:hover,
@@ -23,7 +23,7 @@
 
 /* Navbar links */
 .navbar-default .navbar-nav > li > a {
-    color: #fff;
+    color: #0e0e0e;
     font-size: 16px;
     padding: 10px;
 }
